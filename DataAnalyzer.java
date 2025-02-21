@@ -1,53 +1,67 @@
-import java.util.Arrays;
+import java.util.Scanner;
+import java.io.IOException;
+import java.io.File;
+import java.util.*;
 
 public class DataAnalyzer {
-    public static int searchList(int[] numbers, int target) {
-        for (int i = 0; i < numbers.length; i++) {
-            if (numbers[i] == target) {
-                return i; 
-            }
-        }
-        return -1;
-    }
-
-    public static int binarySearch(int[] numbers, int target) {
-        int left = 0, right = numbers.length - 1;
-
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-
-            if (numbers[mid] == target) {
-                return mid; 
-            }
-            if (numbers[mid] < target) {
-                left = mid + 1;
-            } else {
-                right = mid - 1; 
-            }
-        }
-        return -1; 
-    }
-
-    public static int[] reverseList(int[] numbers) {
-        int left = 0, right = numbers.length - 1;
-        while (left < right) {
-            int temp = numbers[left];
-            numbers[left] = numbers[right];
-            numbers[right] = temp;
-            left++;
-            right--;
+    public static int[] reverseList(int[] numbers){
+        for (int i = 0; i < numbers.length / 2; i++) {
+            // Store the element from the left side
+            int temp = numbers[i];
+            // Put the right side element into the left position
+            numbers[i] = numbers[numbers.length - 1 - i];
+            // Put the stored left element into the right position
+            numbers[numbers.length - 1 - i] = temp;
         }
         return numbers;
     }
-
-    public static void main(String[] args) {
-        int[] arr = {10, 20, 30, 40, 50};
+    //binary search
+    // public static int searchList(int[] numbers, int target){
         
-        System.out.println("Linear Search (50): " + searchList(arr, 50));
+    //     int low = 0;
+    //     int high = numbers.length - 1;
     
-        System.out.println("Binary Search (30): " + binarySearch(arr, 30));
+    //     while (low <= high) {
+    //         int index = (high+low)/2;
+    //         if (target == numbers[index]) {
+    //             return index;
+    //         } else if (target < numbers[index]){
+    //             high = index - 1;
+    //         } else {
+    //             low = index + 1;
+    //         }
+    //     }
+    //     return -1;
+    // }
+    // // linear search
+    public static int searchList(int[] numbers, int target){
+        int index = 0;
+        while(index <= numbers.length - 1){
+            if (numbers[index] == target){
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
+    public static void main(String[] args){
+        int[] arr = new int[100];
+        try {
+                File f = new File("./numbers.txt");
+                Scanner input = new Scanner(f);
+                for (int i=0; i < 100; i++){
+                    arr[i] = input.nextInt();
+                }
+                
+                
+            } catch(IOException e){
+                System.out.println("file not found");
+        }
         
-        int[] reversed = reverseList(arr);
-        System.out.println("Reversed List: " + Arrays.toString(reversed));
+        System.out.println(searchList(arr, 81));
+        int[] reversearr = (reverseList(arr));
+        for (int i=0; i < reversearr.length; i++){
+            System.out.print(reversearr[i] + " ");
+        }
     }
 }
