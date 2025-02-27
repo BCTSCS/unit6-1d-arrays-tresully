@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FileOperator {
@@ -54,10 +55,52 @@ public class FileOperator {
         }
     }
 
+    public ArrayList<String> toStringList() {
+        ArrayList<String> result = new ArrayList<>();
+        try (Scanner scanner = new Scanner(myFile)) {
+            while (scanner.hasNextLine()) {
+                result.add(scanner.nextLine());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
+        return result;
+    }
+
+    public ArrayList<Integer> toIntList() {
+        ArrayList<Integer> result = new ArrayList<>();
+        try (Scanner scanner = new Scanner(myFile)) {
+            while (scanner.hasNextInt()) {
+                result.add(scanner.nextInt());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
+        return result;
+    }
+
+    public ArrayList<Double> toDoubleList() {
+        ArrayList<Double> result = new ArrayList<>();
+        try (Scanner scanner = new Scanner(myFile)) {
+            while (scanner.hasNextDouble()) {
+                result.add(scanner.nextDouble());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
-        FileOperator fileOp = new FileOperator("data.txt"); 
-        int[] numbers = fileOp.toIntArray(10); 
-        double median = fileOp.calculateMedian(numbers);
-        System.out.println("Median: " + median);
+        FileOperator fileOp = new FileOperator("data.txt");
+
+        ArrayList<Integer> intList = fileOp.toIntList();
+        System.out.println("Integer List: " + intList);
+
+        ArrayList<Double> doubleList = fileOp.toDoubleList();
+        System.out.println("Double List: " + doubleList);
+
+        ArrayList<String> stringList = fileOp.toStringList();
+        System.out.println("String List: " + stringList);
     }
 }
