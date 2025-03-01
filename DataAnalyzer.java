@@ -2,283 +2,273 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class DataAnalyzer{
-    //reverse list
-    public static int[] reverseList(int[] numbers){
+/**
+ * DataAnalyzer class provides various data manipulation and analysis methods.
+ */
+public class DataAnalyzer {
+    // Reverse list
+    public static int[] reverseList(int[] numbers) {
         int[] tempList = new int[numbers.length];
-        int index = numbers.length-1;
+        int index = numbers.length - 1;
         int i = 0;
-        while(index>0){
+        while (index >= 0) {
             tempList[i] = numbers[index];
             i++;
             index--;
         }
         return tempList;
     }
-    //Binary Search
-    public static int searchList(int target, int[] numbers){
+
+    // Binary Search
+    public static int searchList(int target, int[] numbers) {
         int minIndex = 0;
-        int maxIndex = numbers.length;
-        while(minIndex>maxIndex){
-            int middleIndex = (int) Math.floor((minIndex+maxIndex)/2);
-            if(target == numbers[middleIndex]){
+        int maxIndex = numbers.length - 1;
+        while (minIndex <= maxIndex) {
+            int middleIndex = (minIndex + maxIndex) / 2;
+            if (target == numbers[middleIndex]) {
                 return middleIndex;
-        }else{
-            if(target>numbers[middleIndex]){
+            } else if (target > numbers[middleIndex]) {
                 minIndex = middleIndex + 1;
-            }else{
+            } else {
                 maxIndex = middleIndex - 1;
             }
-        }
-    }
-        return -1;
-    }
-    public static int searchList(int[] numbers, int target){
-        int index = 0;
-        while(index<=numbers.length - 1){
-            if(numbers[index] == target){
-                return index;
-            }
-            index++;
         }
         return -1;
     }
 
-    public static int getMax(int[] numbers){
+    public static int searchList(int[] numbers, int target) {
+        for (int i = 0; i < numbers.length; i++) {
+            if (numbers[i] == target) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static int getMax(int[] numbers) {
         int maxNum = numbers[0];
-        for(int num : numbers){
-          if(num>maxNum){
-            maxNum = num;
-          }
+        for (int num : numbers) {
+            if (num > maxNum) {
+                maxNum = num;
+            }
         }
         return maxNum;
     }
 
-    public static int getMin(int[] numbers){
+    public static int getMin(int[] numbers) {
         int minNum = numbers[0];
-        for(int num : numbers){
-          if(num<minNum){
-            minNum = num;
-          }
+        for (int num : numbers) {
+            if (num < minNum) {
+                minNum = num;
+            }
         }
         return minNum;
     }
 
-    public static int[] ascendOrDescend(int[] arr, int flip){
-        // if flip = 1, sorts in ascending order
-        // if flip = 0, sorts in descending order
-        int temp;
-        for(int i = 0; i < arr.length-1; i++){
-            for(int j = i+1; j< arr.length; j++){
-                if (arr[j] > arr[i]){
-                    temp = arr[j];
-                    arr[j] = arr[i];
-                    arr[i] = temp;
-                }
-            }
-        }
-        if(flip == 1){
-            return reverseList(arr);
-        }
-        else{
-            return arr;
-        }
-    }
-
-    public static String[] arenaSearch(String[] list, String target, FileOperator file){
-        ArrayList<Integer> indices = new ArrayList<>();
-        for(int i = 0; i<list.length; i++){
-            if(list[i].equals(target)){
-                indices.add(i);
-            }
-        }
-
-        String[] arenaNames = file.toStringArray(30);
-        String[] arenas = new String[indices.size()];
-
-        for(int i =0; i< indices.size(); i++){
-            arenas[i] = arenaNames[indices.get(i)];
-        }
-        return arenas;
-    }
-
-    public static String[] arenasByTeam(String target, FileOperator file){
-        FileOperator fileTeam = new FileOperator("teams.txt");
-        String[] foundList = fileTeam.toStringArray(30);
-        String[] arenas = arenaSearch(foundList, target, file);        
-        
-        return arenas;
-    }
-
-    public static String[] arenasByLocation(String target, FileOperator file){
-        FileOperator fileLocation = new FileOperator("locations.txt");
-        String[] foundList = fileLocation.toStringArray(30);
-        String[] arenas = arenaSearch(foundList, target, file);        
-        
-        return arenas;
-    }
-    
-    public static String[] arenasByCapacity(String target, FileOperator file){
-        FileOperator fileCapacity = new FileOperator("capacities.txt");
-        String[] foundList = fileCapacity.toStringArray(30);
-        String[] arenas = arenaSearch(foundList, target, file);        
-        
-        return arenas;
-    }
-    
-    public static String[] arenasByChampionships(String target, FileOperator file){
-        FileOperator fileChampionships= new FileOperator("championships.txt");
-        String[] foundList = fileChampionships.toStringArray(30);
-        String[] arenas = arenaSearch(foundList, target, file);        
-        
-        return arenas;
-    }
-
-    public static String findMostCommonArena(FileOperator file) {
-        FileOperator fileLocations = new FileOperator("locations.txt");
-        ArrayList<String> locations = fileLocations.toStringList();
-
-        List<String> locationList = new ArrayList<>();
-        List<Integer> countList = new ArrayList<>();
-        
-        for (String location : locations) {
-            if (locationList.contains(location)) {
-                int index = locationList.indexOf(location);
-                countList.set(index, countList.get(index) + 1);
-            } else {
-                locationList.add(location);
-                countList.add(1);
-            }
-        }
-        
-        int maxIndex = 0;
-        for (int i = 1; i < countList.size(); i++) {
-            if (countList.get(i) > countList.get(maxIndex)) {
-                maxIndex = i;
-            }
-        }
-        
-        return locationList.get(maxIndex);
-    }
-    
-    public static String largestArena(FileOperator file){
-        FileOperator fileNames = new FileOperator("arenas.txt");
-        FileOperator fileCapacities = new FileOperator("capacities.txt");
-        String[] arenas = fileNames.toStringArray(30);
-        int[] capacities = fileCapacities.toIntArray(30);
-        int max_size = capacities[0];
-        String largest_arena = arenas[0];
-
-        for(int i = 0 ; i < arenas.length; i++){
-            if(capacities[i] > max_size){
-                max_size = capacities[i];
-                largest_arena = arenas[i];
-            }
-        }
-        return largest_arena;
-
-    }
-
-    public static String[] minChampionships(FileOperator file){
-        ArrayList<String> min_teams = new ArrayList<String>();
-        ArrayList<Integer> min_championships = new ArrayList<Integer>();
-
-        FileOperator fileTeams = new FileOperator("teams.txt");
-        FileOperator fileChampionships = new FileOperator("championships.txt");
-
-        String[] arenas = fileTeams.toStringArray(30);
-        int[] championships = fileChampionships.toIntArray(30);
-
-        min_teams.add(arenas[0]);
-        min_championships.add(championships[0]);
-
-        for(int i = 0; i < arenas.length; i++){
-            if(championships[i] < min_championships.get(0)){
-                min_teams.clear();
-                min_championships.clear();
-                min_teams.add(arenas[i]);
-                min_championships.add(championships[i]);
-            }
-            else if(championships[i] == min_championships.get(0)){
-                min_teams.add(arenas[i]);
-                min_championships.add(championships[i]);
-            }
-            
-        }
-        return min_teams.toArray(new String[0]);
-    }
-
-    public static int[] capacityByCity(String target, FileOperator file){
-        FileOperator fileNames = new FileOperator("arenas.txt");
-        FileOperator fileCapacities = new FileOperator("capacities.txt");
-
-        String[] arenas = fileNames.toStringArray(30);
-        ArrayList<Integer> final_capacities = new ArrayList<>();
-
-        int[] capacities = fileCapacities.toIntArray(30);
-
-        for (int i = 0; i < arenas.length; i++){
-            if(arenas[i].equals(target)){
-                final_capacities.add(capacities[i]);
-            }
-        }
-        int[] new_capacities = new int[final_capacities.size()];
-        
-        for(int i = 0; i < new_capacities.length; i++){
-            new_capacities[i] = final_capacities.get(i);
-        }
-        return new_capacities;
-
-    }
-
-    public static void main(String[] args){
-        int[] arr = {1,2,3,4,5,6,7,8,9,10};
-        System.out.println(searchList(arr ,5));
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        System.out.println(searchList(arr, 5));
 
         int[] newArr = reverseList(arr);
-        for(int i = 0; i< newArr.length; i++){
-            System.out.print(newArr[i] + " ");
+        for (int num : newArr) {
+            System.out.print(num + " ");
         }
         System.out.println("");
 
         int[] fileArr = new int[100];
-        try{
+        try {
             File f = new File("numbers.txt");
             Scanner scan = new Scanner(f);
-            for(int i=0; i<100; i++){
+            for (int i = 0; i < 100; i++) {
                 fileArr[i] = scan.nextInt();
             }
-        }catch(IOException f){
-            System.out.println("file not found");
+            scan.close();
+        } catch (IOException e) {
+            System.out.println("File not found.");
         }
 
-        //linear search
-        System.out.println(searchList(fileArr,81));
+        // Linear search
+        System.out.println(searchList(fileArr, 81));
 
-        //binary search
+        // Binary search
         System.out.println(searchList(81, fileArr));
 
-        //reverse list
+        // Reverse list
         int[] reverseArr = reverseList(fileArr);
-        for(int i=0; i < reverseArr.length -1; i++){
-            System.out.print(reverseArr[i] + " ");
-
-
-        FileOperator file1 = new FileOperator("capacities.txt");
-        int[] capacities = file1.toIntArray(30);
-        for(int num : capacities){
-              System.out.print(num + " ");
+        for (int num : reverseArr) {
+            System.out.print(num + " ");
         }
 
         System.out.println("");
-        System.out.println(getMax(capacities));
-        System.out.println(getMin(capacities));
-        int[] OrderedCapacities = ascendOrDescend(capacities, 1);
 
-        FileOperator input = new FileOperator("college.txt");
-        ArrayList<String> colleges = input.toStringList();
-        for(String college : colleges){
-            System.out.print(college + " ");
-        }
+        // User entity example
+        BusinessApp.run();
     }
-}}
+}
+
+/**
+ * Represents a User entity with personal details and data analysis methods.
+ */
+class User {
+    private String name;
+    private int age;
+    private String email;
+    private int[] transactions; // Stores user data such as purchase transactions
+
+    /**
+     * Default constructor initializes default values.
+     */
+    public User() {
+        name = "Unknown";
+        age = 0;
+        email = "Unknown";
+        transactions = new int[0];
+    }
+
+    /**
+     * Parameterized constructor to initialize user details.
+     * @param name User's name
+     * @param age User's age
+     * @param email User's email
+     * @param transactions Array of transactions representing user activity
+     */
+    public User(String name, int age, String email, int[] transactions) {
+        this.name = name;
+        this.age = age;
+        this.email = email;
+        this.transactions = transactions;
+    }
+
+    /**
+     * Gets the user's name.
+     * @return name of the user
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the user's name.
+     * @param name Name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Gets the user's age.
+     * @return age of the user
+     */
+    public int getAge() {
+        return age;
+    }
+
+    /**
+     * Sets the user's age.
+     * @param age Age to set
+     */
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    /**
+     * Gets the user's email.
+     * @return email of the user
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Sets the user's email.
+     * @param email Email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * Gets the transaction history.
+     * @return Array of transactions
+     */
+    public int[] getTransactions() {
+        return transactions;
+    }
+
+    /**
+     * Sets the transaction history.
+     * @param transactions Array of transactions to set
+     */
+    public void setTransactions(int[] transactions) {
+        this.transactions = transactions;
+    }
+
+    /**
+     * Finds the highest transaction amount.
+     * @return Maximum transaction value
+     */
+    public int getMaxTransaction() {
+        if (transactions.length == 0) return 0;
+        int max = transactions[0];
+        for (int num : transactions) {
+            if (num > max) {
+                max = num;
+            }
+        }
+        return max;
+    }
+
+    /**
+     * Finds the lowest transaction amount.
+     * @return Minimum transaction value
+     */
+    public int getMinTransaction() {
+        if (transactions.length == 0) return 0;
+        int min = transactions[0];
+        for (int num : transactions) {
+            if (num < min) {
+                min = num;
+            }
+        }
+        return min;
+    }
+
+    /**
+     * Returns a summary of user information.
+     * @return A string representation of the user.
+     */
+    @Override
+    public String toString() {
+        return "User: " + name + "\nAge: " + age + "\nEmail: " + email +
+               "\nMax Transaction: " + getMaxTransaction() +
+               "\nMin Transaction: " + getMinTransaction();
+    }
+}
+
+/**
+ * Business class to demonstrate entity storage and analysis.
+ */
+class BusinessApp {
+    public static void run() {
+        System.out.println("\n----- Running BusinessApp -----\n");
+
+        // Example user data
+        int[] transactions = {120, 450, 230, 780, 560, 90};
+
+        // Creating a User object using a parameterized constructor
+        User user1 = new User("Robert Sullivan", 17, "rob@example.com", transactions);
+
+        // Displaying user details
+        System.out.println(user1);
+
+        // Updating user information
+        user1.setEmail("new_email@example.com");
+        System.out.println("\nUpdated User Email: " + user1.getEmail());
+
+        // Finding and displaying transaction statistics
+        System.out.println("Highest Transaction: " + user1.getMaxTransaction());
+        System.out.println("Lowest Transaction: " + user1.getMinTransaction());
+
+        System.out.println("\n----- BusinessApp Execution Completed -----");
+    }
+}
