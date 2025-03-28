@@ -1,76 +1,77 @@
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.util.*;
-
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 public class FileOperator {
-   private Scanner fileReader;
-   private File myFile;
-  
-   public FileOperator(String filename) {
-      setFile(filename);
-  }
+    private Scanner fileReader;
+    private File myFile; 
 
-    public void setFile(String filename) {
+    public FileOperator(String filename){
+        setFile(filename);
+    }
+
+    public void setFile(String filename){
         myFile = new File(filename);
-        try {
-        fileReader = new Scanner(myFile);
-        } catch(FileNotFoundException error) {
-              System.out.println("File not found.");
-              fileReader = null;
+        try{
+            fileReader = new Scanner(myFile);
+        }catch(FileNotFoundException error){
+            System.out.println("File not found.");
         }
     }
- 
-    public int[] toIntArray(int size) {
-        int[] arr= new int[size];
-        for(int i=0; i<size; i++){
-           arr[i]=fileReader.nextInt();
-         } 
+
+    public int[] toIntArray(String filepath, int size){
+        int[] arr = new int[size];
+        this.setFile(filepath);
+        for(int i = 0; i < size; i++){
+            arr[i] = fileReader.nextInt();
+        }
         return arr;
     }
 
-    public double[] toDoubleArray(int size) {
-        double[] arr= new double[size];
-        for(int i=0; i<size; i++){
-           arr[i]=fileReader.nextDouble();
-         } 
+    public double[] toDoubleArray(String filepath, int size){
+        double[] arr = new double[size];
+        this.setFile(filepath);
+        for(int i = 0; i< size; i++){
+            arr[i] = fileReader.nextDouble();
+        }
         return arr;
     }
 
-    public String[] toStringArray(int size) {
-        String[] arr= new String[size];
-        for(int i=0; i<size; i++){
-           arr[i]=fileReader.nextLine();
-         } 
+    public String[] toStringArray(String filepath, int size){
+        String[] arr = new String[size];
+        this.setFile(filepath);
+        for(int i = 0; i < size; i++){
+            arr[i] = fileReader.nextLine();
+        }
         return arr;
     }
 
-    public ArrayList<String> toStringList(){
-        ArrayList<String> result = new ArrayList<>();
-
+    public ArrayList<String> toStringArray(String filepath){
+        ArrayList<String> arr = new ArrayList<String>();
+        this.setFile(filepath);
         while(fileReader.hasNextLine()){
-            result.add(fileReader.nextLine());
+            arr.add(fileReader.nextLine());
         }
-        return result;
+        return arr;
     }
 
-
-    public ArrayList<Integer> toIntList(){
-        ArrayList<Integer> result = new ArrayList<>();
-
+    public ArrayList<Integer> toIntgArray(String filepath){
+        ArrayList<Integer> arr = new ArrayList<Integer>();
+        this.setFile(filepath);
         while(fileReader.hasNextInt()){
-            result.add(fileReader.nextInt());
+            arr.add(fileReader.nextInt());
         }
-        return result;
+        return arr;
     }
 
-
-    public ArrayList<Double> toDoubleList(){
-        ArrayList<Double> result = new ArrayList<>();
-
+    public ArrayList<Double> toDoubleArray(String filepath){
+        ArrayList<Double> arr = new ArrayList<Double>();
+        this.setFile(filepath);
         while(fileReader.hasNextDouble()){
-            result.add(fileReader.nextDouble());
+            arr.add(fileReader.nextDouble());
         }
-        return result;
+        return arr;
     }
+
+    
 }
